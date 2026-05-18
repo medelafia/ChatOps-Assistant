@@ -1,4 +1,3 @@
-from core.command_service import execute_plan
 from langchain_groq import ChatGroq
 import os
 from schemas.schemas import Plan 
@@ -16,7 +15,7 @@ llm = ChatGroq(
 llm = llm.with_structured_output(Plan)
 
 
-def generate_commands(message : str) : 
+def plan(message : str) : 
     response = llm.invoke(
         [(
             "system" , 
@@ -32,8 +31,9 @@ def generate_commands(message : str) :
                 - step: short title
                 - description: explanation of what the command does
                 - command: the exact Linux command
-                - risk: low, medium, or high (based on potential system impact)
+                - risk: low, medium, high or critical (based on potential system impact)
                 Return ONLY valid JSON. No markdown, no explanations.
+                
             """
         ),
         (
@@ -43,7 +43,4 @@ def generate_commands(message : str) :
     )
     return response
 
-def analyse_plan_and_launch_execution(plan : Plan) : 
-    result_of_execution = execute_plan(plan)
 
-    return result_of_execution
