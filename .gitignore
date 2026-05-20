@@ -5,41 +5,41 @@ __pycache__/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-frontend/node_modules
+ui/node_modules
 /.pnp
-frontend/.pnp.*
-frontend/.yarn/*
-frontend/!.yarn/patches
-frontend/!.yarn/plugins
-frontend/!.yarn/releases
-frontend/!.yarn/versions
+ui/.pnp.*
+ui/.yarn/*
+ui/!.yarn/patches
+ui/!.yarn/plugins
+ui/!.yarn/releases
+ui/!.yarn/versions
 
 # testing
-frontend/coverage
+ui/coverage
 
 # next.js
-frontend/.next/
-frontend/out/
+ui/.next/
+ui/out/
 
 # production
-frontend/build
+ui/build
 
 # misc
-frontend/.DS_Store
-frontend/*.pem
+ui/.DS_Store
+ui/*.pem
 
 # debug
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/.pnpm-debug.log*
+ui/npm-debug.log*
+ui/yarn-debug.log*
+ui/yarn-error.log*
+ui/.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-frontend/.env*
+ui/.env*
 
 # vercel
-frontend/.vercel
+ui/.vercel
 
 # typescript
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+ui/*.tsbuildinfo
+ui/next-env.d.ts
