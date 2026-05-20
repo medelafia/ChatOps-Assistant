@@ -2,7 +2,7 @@ from fastapi.security import OAuth2PasswordBearer
 from utils.env_factory import get_config
 from datetime import datetime ,timedelta , timezone
 from jose import jwt , JWTError
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request
 
 SECRET_KEY = get_config("SECRET_KEY")
 ALGORITHM = "HS256"
@@ -17,13 +17,13 @@ def create_access_token(data: dict ) :
     return encoded_jwt
 
 
-def get_current_user(token : str = Depends(oauth2_scheme)):
+def get_current_user(request : Request ): 
+    token = request.cookies.get("access_token")
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")

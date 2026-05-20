@@ -4,6 +4,7 @@ import sqlite3
 connection =  None 
 
 def get_connection() : 
+    global connection
     if connection is None : 
         try : 
             connection = sqlite3.connect("db/__db__.db") 
@@ -26,7 +27,6 @@ def create_all_tables() :
         cursor.execute(sql) 
         get_connection().commit()
         print("Tables created successfully!")
+        cursor.close()
     except Exception as ex : 
         print("cannot create tables")
-    finally : 
-        cursor.close()
