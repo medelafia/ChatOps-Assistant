@@ -17,6 +17,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { MoreHorizontalIcon, FolderIcon, ArrowRightIcon, Trash2Icon } from "lucide-react"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
+import { Badge } from "./ui/badge"
 
 export function NavProjects({
   projects,
@@ -32,12 +34,25 @@ export function NavProjects({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>History</SidebarGroupLabel>
+      <Select>
+        <SelectTrigger className="w-auto mb-4 mx-2">
+        <SelectValue placeholder="Select owner" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>By</SelectLabel>
+            <SelectItem value="apple">All</SelectItem>
+            <SelectItem value="banana">You</SelectItem>
+            <SelectItem value="blueberry">Aymen</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild >
               <a href={item.url}>
-                <span>{item.name}</span>
+                <span>{item.name} <Badge variant="default" className="ms-2">by you</Badge></span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
@@ -57,17 +72,8 @@ export function NavProjects({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <FolderIcon className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ArrowRightIcon className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
                   <Trash2Icon className="text-muted-foreground" />
-                  <span>Delete Project</span>
+                  <span>Delete session</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
