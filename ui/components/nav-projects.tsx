@@ -52,7 +52,7 @@ export function NavProjects({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild >
               <a href={item.url}>
-                <span>{item.name} <Badge variant="default" className="ms-2">by you</Badge></span>
+                <span>{item.name} <Badge className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 ms-2">by you</Badge></span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>

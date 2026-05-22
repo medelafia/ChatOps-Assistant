@@ -16,7 +16,6 @@ def create_access_token(data: dict ) :
     encoded_jwt = jwt.encode(to_encode , key=SECRET_KEY ,algorithm=ALGORITHM)
     return encoded_jwt
 
-
 def get_current_user(request : Request ): 
     token = request.cookies.get("access_token")
     credentials_exception = HTTPException(
@@ -24,6 +23,8 @@ def get_current_user(request : Request ):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    if token is None : 
+        raise credentials_exception
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")

@@ -21,6 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { ChevronsUpDownIcon, SparklesIcon, BadgeCheckIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -75,7 +76,7 @@ export function NavUser({
               <DropdownMenuItem>
                 <BellIcon
                 />
-                Settings
+                <Link href={"/chat/settings"}>Settings</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
