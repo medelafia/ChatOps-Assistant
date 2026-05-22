@@ -25,7 +25,7 @@ export default function Page() {
       setError("The username or password should be not empty") 
       return 
     }else { 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/token` , {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token` , {
         method : "POST" ,
         body : formData ,
         credentials : "include"

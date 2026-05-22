@@ -65,7 +65,9 @@ export default function Page() {
       setIsGeneratingPlan(true)
       addMessageToList({from : "you" , message : message , type : "SIMPLE"})
       setMessageToSend("")
-      fetch(`http://localhost:8000/chat?message=${encodeURIComponent(message)}`)
+      fetch(`http://localhost:8000/chat?message=${encodeURIComponent(message)}`, {
+        credentials : "include"
+      })
       .then(res => {
         if (!res.ok) throw new Error("Network error")
         return res.json()
@@ -80,7 +82,8 @@ export default function Page() {
           headers : {
             "Content-Type": "application/json"
           } ,
-          body : JSON.stringify(data.content)
+          credentials : "include" , 
+          body : JSON.stringify(data.content) ,
         })
         .then(res => {
           return res.json()
@@ -158,7 +161,7 @@ export default function Page() {
                           <div className="flex justify-between">
                             <h1 className="capitalize font-bold text-lg">{key + 1} - {step.step_name}</h1>
                             <div>
-                              <span className="font-bold capitalize">command risk : </span>
+                              <span className="font-bold capitalize">command risk level : </span>
                               <Badge className={getBadgeClass(step.risk)}>
                                 {step.risk}
                               </Badge>

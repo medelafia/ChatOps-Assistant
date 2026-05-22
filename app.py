@@ -5,18 +5,20 @@ from schemas import schemas
 from fastapi.middleware.cors import CORSMiddleware
 from core.sandbox_executor import execute_plan_in_sandbox 
 from auth.auth import create_access_token  , get_current_user
-from services.user_services import check_user_password , get_user_by_username, create_super_user
+from services.user_services import check_user_password , get_user_by_username, create_super_user , get_all_users
 from contextlib import asynccontextmanager
 from db.sqlite_connection import create_all_tables
+from services.role_services import create_super_role, get_all_roles
 
 
 
 @asynccontextmanager 
 async def lifespan(app : FastAPI) : 
     print("StartUp Now")
-    print("StartUp Now")
     create_all_tables()
     create_super_user()
+    create_super_role()
+    
     yield
     print("ShuttingDown Now")
 
@@ -34,13 +36,21 @@ app.add_middleware(
     allow_headers=["*"],         # Allow all request headers
 )
 
-@app.get("/chat") 
-def generate_plan(message : str) -> schemas.Response : 
+@app.get("/api/v1/chat") 
+async def generate_plan(message : str , user : dict = Depends(get_current_user)) -> schemas.Response : 
     return schemas.Response(type="PLAN" , content=plan(message))
 
-@app.post("/executePlan")
-def execute_plan_route(plan : schemas.Plan) -> schemas.Response :
+@app.post("/api/v1/executePlan")
+async def execute_plan_route(plan : schemas.Plan, user : dict = Depends(get_current_user)) -> schemas.Response :
     return schemas.Response(type="PLAN_RESULT" , content=execute_plan_in_sandbox(plan))
+
+@app.get("/api/v1/users")
+def get_all_users_route(user : dict = Depends(get_current_user)) :
+    return get_all_users()
+
+@app.get("/api/v1/roles")
+def get_all_roles_route(user : dict = Depends(get_current_user)) :
+    return get_all_roles()
 
 @app.post("/api/v1/auth/token")
 async def login_for_access_token(response : Response , form_data: OAuth2PasswordRequestForm = Depends()):
@@ -64,4 +74,3 @@ async def login_for_access_token(response : Response , form_data: OAuth2Password
 async def verify_me(user : dict = Depends(get_current_user)):
     user.update({"status" : "success" })
     return user
-

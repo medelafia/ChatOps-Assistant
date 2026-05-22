@@ -1,3 +1,4 @@
+"use client";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { MoreHorizontalIcon, Plus, UserRoundPlus, Users2 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -6,21 +7,30 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Badge } from "./ui/badge";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "./ui/combobox";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type Role = { 
     roleName : string ; 
     allowedCommands : string[]; 
 }
 
-const roles : Role[] = [
-    {roleName : "SUPER" , allowedCommands : ["*"] },
-    {roleName : "DEV" , allowedCommands : ["ls" , "cat" , "cd"]}
-]
 
-export default function RolesSettings() { 
+export default function RolesSettings() {
     const anchor = useComboboxAnchor()
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [ roles , setRoles ] = React.useState<Role[]>([])
+
+    useEffect(()=> {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles` , {
+            credentials : "include"
+        }) 
+        .then(res => {
+            if(res.ok) return res.json()
+        })
+        .then(data => {
+            setRoles(data)
+        })
+    } ,[]) 
     return (
     <>
         <div className="flex justify-between">

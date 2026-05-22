@@ -21,16 +21,16 @@ class StepResult(BaseModel) :
 class PlanResult(BaseModel) : 
     steps_result : List[StepResult]
 
-
-
 class Response(BaseModel) : 
     type : str = Field(description="the type of response") 
     content : PlanResult | Plan
-
-
-
 
 class User(BaseModel) : 
     username : str 
     password : str 
     roles : List[str]
+
+
+class Role(BaseModel) :
+    roleName : str 
+    allowedCommands : List[str] 

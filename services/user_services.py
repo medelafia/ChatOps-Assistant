@@ -16,6 +16,16 @@ def get_user_by_username(username : str) :
     except Exception as ex :
         print(f"Error : {ex}") 
 
+def get_all_users() : 
+    try : 
+        cursor = get_connection().cursor() 
+        sql = "SELECT * FROM users"
+        cursor.execute(sql) 
+        return [ User(username=row[0] , password=row[1] , roles=row[2].split(",")) for row in cursor.fetchone() ]
+    except Exception as ex :
+        print(f"Error : {ex}") 
+
+
 def save_user(user : User) : 
     try : 
         cursor = get_connection().cursor() 
