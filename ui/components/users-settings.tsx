@@ -8,9 +8,8 @@ import { Badge } from "./ui/badge";
 import { Switch } from "./ui/switch";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Label } from "./ui/label";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "./ui/combobox";
-import React, { useState } from "react";
+import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "@/components/ui/combobox";
+import React, { useEffect, useState } from "react";
 
 type User = { 
     username : string ; 
@@ -19,23 +18,41 @@ type User = {
     isActive : boolean; 
     isSudoer :  boolean
 }
-const users : User[] = [ 
-    {"username" : "mohamedelafia" , "password" :"$2b$12$PJJ8uG3MZMdvqktuPZJmJeN.94Tv6wqfuq/xsker/AVeBlb3bA68W" , "roles" : ["SUPER"] , "isActive" : true , "isSudoer" : true}
-]
+
 type Role = { 
     roleName : string ; 
     allowedCommands : string[]; 
 }
 
-const roles : Role[] = [
-    {roleName : "SUPER" , allowedCommands : ["*"] },
-    {roleName : "DEV" , allowedCommands : ["ls" , "cat" , "cd"]}
-]
-
-
 export default function UsersSettings() { 
-    const anchor = useComboboxAnchor()
+    const anchor = React.useRef<HTMLDivElement | null>(null)
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [ users , setUsers ]= React.useState<User[]>([])
+    const [roles , setRoles ] =React.useState<Role[]>([])
+
+
+    useEffect(()=>{
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/users` , {
+            credentials : "include"
+        }) 
+        .then(res => {
+            if(res.ok) return res.json()
+        })
+        .then(data => {
+            console.log(data)
+            setUsers(data)
+        })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles` , {
+            credentials : "include"
+        }) 
+        .then(res => {
+            if(res.ok) return res.json()
+        })
+        .then(data => {
+            setRoles(data)
+        })
+    }, [] )
+
     return (
     <>
        <div className="flex justify-between">
@@ -72,9 +89,12 @@ export default function UsersSettings() {
                             autoHighlight
                             items={roles.map(val => val.roleName)}
                             value={selectedRoles} 
-                            onValueChange={setSelectedRoles}
+                            onValueChange={(val) => {setSelectedRoles(val)
+
+                                console.log(val)
+                            }}
                             >
-                            <ComboboxChips ref={anchor} className="w-full ">
+                            <ComboboxChips className="w-full ">
                                 <ComboboxValue>
                                 {(values) => (
                                     <React.Fragment>
@@ -86,7 +106,7 @@ export default function UsersSettings() {
                                 )}
                                 </ComboboxValue>
                             </ComboboxChips>
-                            <ComboboxContent anchor={anchor}>
+                            <ComboboxContent>
                                 <ComboboxEmpty>No items found.</ComboboxEmpty>
                                 <ComboboxList>
                                 {(item) => (

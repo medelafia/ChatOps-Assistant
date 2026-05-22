@@ -29,6 +29,8 @@ class User(BaseModel) :
     username : str 
     password : str 
     roles : List[str]
+    isActive : bool 
+    isSudoer : bool
 
 
 class Role(BaseModel) :

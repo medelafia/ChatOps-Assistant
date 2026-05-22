@@ -5,11 +5,10 @@ from schemas import schemas
 from fastapi.middleware.cors import CORSMiddleware
 from core.sandbox_executor import execute_plan_in_sandbox 
 from auth.auth import create_access_token  , get_current_user
-from services.user_services import check_user_password , get_user_by_username, create_super_user , get_all_users
+from services.user_services import check_user_password , get_user_by_username, create_super_user , get_all_users ,  save_user
 from contextlib import asynccontextmanager
 from db.sqlite_connection import create_all_tables
-from services.role_services import create_super_role, get_all_roles
-
+from services.role_services import create_super_role, get_all_roles, save_role
 
 
 @asynccontextmanager 
@@ -48,9 +47,18 @@ async def execute_plan_route(plan : schemas.Plan, user : dict = Depends(get_curr
 def get_all_users_route(user : dict = Depends(get_current_user)) :
     return get_all_users()
 
+@app.post("/api/v1/users")
+def save_new_user_router(user : schemas.User, user_dict : dict = Depends(get_current_user)) : 
+    return save_user(user) 
+
 @app.get("/api/v1/roles")
 def get_all_roles_route(user : dict = Depends(get_current_user)) :
     return get_all_roles()
+
+@app.post("/api/v1/roles")
+def save_new_role_router(role : schemas.Role, user : dict = Depends(get_current_user)) : 
+    return save_role(role) 
+
 
 @app.post("/api/v1/auth/token")
 async def login_for_access_token(response : Response , form_data: OAuth2PasswordRequestForm = Depends()):
@@ -74,3 +82,4 @@ async def login_for_access_token(response : Response , form_data: OAuth2Password
 async def verify_me(user : dict = Depends(get_current_user)):
     user.update({"status" : "success" })
     return user
+
